@@ -1,0 +1,12 @@
+[project]
+name = "sir-bilal-mk-fastapi"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "fastapi>=0.125.0",
+    "psycopg[binary]>=3.3.2",
+    "sqlmodel>=0.0.27",
+    "uvicorn>=0.38.0",
+]
