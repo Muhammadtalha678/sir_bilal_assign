@@ -40,3 +40,23 @@ def delete_todo(todo_id: int, session: SessionDep):
     session.delete(todo)
     session.commit()
     return {"detail":"Todo deleted!"}
+
+@router.put("/todos/{todo_id}")
+def update_todo(todo_id:int,todo_data:TodoCreate,session:SessionDep)->Todo:
+    db_todo = session.get(Todo, todo_id)
+    if not db_todo:
+        raise HTTPException(status_code=404, detail="Todo ID not found!")
+
+    if todo_data.content != db_todo.content: # Agar content change ho raha hai
+        existing_todo = session.exec(
+            select(Todo).where(Todo.content == todo_data.content)
+        ).first()
+        if existing_todo:
+            raise HTTPException(status_code=400, detail=f"Content '{todo_data.content}' already exists!")
+    
+    db_todo.content = todo_data.content
+
+    session.add(db_todo)
+    session.commit()
+    session.refresh(db_todo)
+    return db_todo
